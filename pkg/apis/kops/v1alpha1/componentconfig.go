@@ -160,6 +160,9 @@ type KubeProxyConfig struct {
 	Image string `json:"image,omitempty"`
 	// TODO: Better type ?
 	CPURequest string `json:"cpuRequest,omitempty"` // e.g. "20m"
+	CPULimit   string `json:"cpuLimit,omitempty"`
+	MEMRequest string `json:"memRequest,omitempty"`
+	MEMLimit   string `json:"memLimit,omitempty"`
 	// LogLevel is the logging level of the proxy
 	LogLevel int32 `json:"logLevel,omitempty" flag:"v"`
 	// ClusterCIDR is the CIDR range of the pods in the cluster

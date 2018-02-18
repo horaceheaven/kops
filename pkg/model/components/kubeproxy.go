@@ -47,6 +47,18 @@ func (b *KubeProxyOptionsBuilder) BuildOptions(o interface{}) error {
 		config.CPURequest = "100m"
 	}
 
+	if config.MEMRequest == "" {
+		config.MEMRequest = "100Mi"
+	}
+
+	if config.CPULimit == "" {
+		config.CPULimit = "100m"
+	}
+
+	if config.MEMLimit == "" {
+		config.MEMLimit = "100Mi"
+	}
+
 	image, err := Image("kube-proxy", clusterSpec, b.Context.AssetBuilder)
 	if err != nil {
 		return err

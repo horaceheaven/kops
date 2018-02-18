@@ -129,6 +129,21 @@ func (b *KubeProxyBuilder) buildPod() (*v1.Pod, error) {
 		return nil, fmt.Errorf("Error parsing CPURequest=%q", c.CPURequest)
 	}
 
+	cpuLimit, err := resource.ParseQuantity(c.CPULimit)
+	if err != nil {
+		return nil, fmt.Errorf("Error parsing CPULimit=%q", c.CPULimit)
+	}
+
+	memRequest, err := resource.ParseQuantity(c.MEMRequest)
+	if err != nil {
+		return nil, fmt.Errorf("Error parsing MEMRequest=%q", c.MEMRequest)
+	}
+
+	memLimit, err := resource.ParseQuantity(c.MEMLimit)
+	if err != nil {
+		return nil, fmt.Errorf("Error parsing MEMLimit=%q", c.MEMLimit)
+	}
+
 	flags, err := flagbuilder.BuildFlagsList(c)
 	if err != nil {
 		return nil, fmt.Errorf("error building kubeproxy flags: %v", err)
@@ -150,7 +165,12 @@ func (b *KubeProxyBuilder) buildPod() (*v1.Pod, error) {
 			"/var/log/kube-proxy.log"),
 		Resources: v1.ResourceRequirements{
 			Requests: v1.ResourceList{
-				"cpu": cpuRequest,
+				"cpu":    cpuRequest,
+				"memory": memRequest,
+			},
+			Limits: v1.ResourceList{
+				"cpu":    cpuLimit,
+				"memory": memLimit,
 			},
 		},
 		SecurityContext: &v1.SecurityContext{
